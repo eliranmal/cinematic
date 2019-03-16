@@ -2,11 +2,17 @@
   <div class="search">
     <label>
       <input type="search"
+             tabindex="0"
+             v-model="term"
              :placeholder="i18n.placeholder"
              @input="debouncedSearch"
              @keydown.enter="debouncedImmediateSearch"
              ref="searchInput">
-      <span class="icon" @click="debouncedImmediateSearch"></span>
+      <span class="icon"
+            tabindex="0"
+            @keydown.enter="debouncedImmediateSearch"
+            @keydown.space="debouncedImmediateSearch"
+            @click="debouncedImmediateSearch"></span>
     </label>
   </div>
 </template>
@@ -23,7 +29,7 @@ export default {
       },
       searching: false,
       delay: 666,
-      debounce,
+      term: null,
     };
   },
   created() {
@@ -35,6 +41,10 @@ export default {
   },
   methods: {
     search() {
+      if (!this.term || !this.term.trim()) {
+        console.log('> > > no search term, aborting');
+        return;
+      }
       console.log('> > > starting search');
       this.searching = true;
       setTimeout(() => {
@@ -58,18 +68,20 @@ export default {
   label {
     position: relative;
     display: block;
-    box-shadow: 100px -10px 120px #e2e2e2;
+    border-radius: $height / 2;
+    box-shadow: 100px -10px 100px #e2e2e2;
 
     .icon {
 
       &:after {
         content: '\21b5';
+        box-sizing: border-box;
         position: absolute;
         top: $height * .25;
         right: $height * .25;
         width: $height * .5;
         height: $height * .5;
-        cursor: pointer;
+        border: 2px solid transparent;
         border-radius: 50%;
         text-align: center;
         font-size: $height * .375;
@@ -77,10 +89,11 @@ export default {
         line-height: 1.75;
         color: var(--color-bg);
         background-color: var(--color-text-complement);
+        cursor: pointer;
       }
 
       &:focus:after {
-        border: 1px solid var(--color-text);
+        color: var(--color-text);
       }
     }
 
