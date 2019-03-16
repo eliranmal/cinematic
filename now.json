@@ -1,11 +1,6 @@
 {
   "version": 2,
   "name": "rubbish-rubies",
-  "// build": {
-    "env": {
-      "VUE_APP_OMDB_API_KEY": "@vue-app-omdb-api-key"
-    }
-  },
   "builds": [
     {
       "src": "package.json",
