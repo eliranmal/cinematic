@@ -11,7 +11,9 @@ module.exports = {
   outputDir: undefined,
   assetsDir: undefined,
   runtimeCompiler: true,
-  productionSourceMap: undefined,
+  productionSourceMap: true,
   parallel: undefined,
-  css: undefined,
+  css: {
+    sourceMap: true,
+  },
 };
