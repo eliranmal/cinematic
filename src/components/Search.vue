@@ -31,17 +31,17 @@ export default {
       i18n: {
         placeholder: 'search flicks',
       },
-      delay: 666,
-      searchValue: '',
-      searchTerm: '',
-      fetchBaseUrl: 'http://www.omdbapi.com',
       year: null,
       type: null,
+      searchTerm: '',
+      searchValue: '',
+      debounceDelay: 666,
+      fetchBaseUrl: process.env.VUE_APP_OMDB_API_BASE_URL,
     };
   },
   created() {
-    this.debouncedSearch = debounce(this.search, this.delay);
-    this.debouncedImmediateSearch = debounce(this.search, this.delay, true);
+    this.debouncedSearch = debounce(this.search, this.debounceDelay);
+    this.debouncedImmediateSearch = debounce(this.search, this.debounceDelay, true);
   },
   mounted() {
     this.$refs.searchInput.focus();

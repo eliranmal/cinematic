@@ -4,15 +4,13 @@ export default {
   data() {
     return {
       fetching: false,
-      fetchBaseUrl: null,
       fetchPath: null,
       fetchQuery: null,
-      fetchResponseData: {},
     };
   },
   created() {
     if (!this.fetchBaseUrl) {
-      throw new Error('fetchBaseUrl must be available on the instance data');
+      throw new Error('fetchBaseUrl must be available on the instance');
     }
     this.transport = new Transport({
       baseUrl: this.fetchBaseUrl,
@@ -25,15 +23,16 @@ export default {
     },
     dispatchFetch(opts) {
       if (!this.transport) {
-        throw new Error('no transport found');
+        return;
       }
       this.fetching = true;
       this.transport.fetch(opts)
         .then((data) => {
-          this.fetchResponseData = data;
           this.fetching = false;
-          // todo - send events upwards
-          // this.$emit('fetch');
+          this.$emit('data', data);
+        })
+        .catch((error) => {
+          this.$emit('error', error);
         });
     },
   },
