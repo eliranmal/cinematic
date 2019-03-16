@@ -1,17 +1,22 @@
 <template>
   <div id="app">
-    <!--<img id="source-image" src="./assets/images/logo.png">-->
-    <HelloWorld msg="cinematic"/>
+    <Header msg="cinematic"/>
+    <Search/>
+    <Gallery/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue';
+import Header from './components/Header.vue';
+import Search from './components/Search.vue';
+import Gallery from './components/Gallery.vue';
 
 export default {
   name: 'app',
   components: {
-    HelloWorld,
+    Header,
+    Search,
+    Gallery,
   },
 };
 </script>
@@ -19,11 +24,9 @@ export default {
 <style lang="scss">
 
   #app {
-    font-family: 'harting', 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    margin-top: 60px;
+    padding: 1rem 3rem;
+    width: 100%;
+    height: 100%;
   }
 
 </style>

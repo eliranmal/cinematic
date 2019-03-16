@@ -9,6 +9,7 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "debounce": "^1.2.0",
     "vue": "^2.6.6"
   },
   "devDependencies": {
