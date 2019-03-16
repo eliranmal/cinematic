@@ -36,7 +36,7 @@ export default {
       searchTerm: '',
       searchValue: '',
       debounceDelay: 666,
-      fetchBaseUrl: process.env.VUE_APP_OMDB_API_BASE_URL,
+      fetchBaseUrl: `${window.location.protocol}//${process.env.VUE_APP_OMDB_API_DOMAIN}`,
     };
   },
   created() {
