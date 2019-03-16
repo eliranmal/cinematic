@@ -30,6 +30,13 @@
       "dest": "/img/$1"
     },
     {
+      "src": "^/font/(.*)",
+      "headers": {
+        "cache-control": "max-age=31536000,immutable"
+      },
+      "dest": "/font/$1"
+    },
+    {
       "src": "^/favicon\\.ico",
       "headers": {
         "cache-control": "max-age=31536000,immutable"
