@@ -9,9 +9,9 @@ module.exports = {
   lintOnSave: false,
   publicPath: undefined,
   outputDir: undefined,
-  assetsDir: undefined,
+  assetsDir: './src/assets',
   runtimeCompiler: true,
-  productionSourceMap: true,
+  productionSourceMap: undefined,
   parallel: undefined,
   css: {
     sourceMap: true,
