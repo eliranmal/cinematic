@@ -3,7 +3,7 @@
     <label>
       <input type="search"
              tabindex="0"
-             v-model="term"
+             v-model="searchValue"
              :placeholder="i18n.placeholder"
              @input="debouncedSearch"
              @keydown.enter="debouncedImmediateSearch"
@@ -19,17 +19,24 @@
 
 <script>
 import { debounce } from 'debounce';
+import fetch from '../mixins/fetch';
 
 export default {
   name: 'Search',
+  mixins: [
+    fetch,
+  ],
   data() {
     return {
       i18n: {
         placeholder: 'search flicks',
       },
-      searching: false,
       delay: 666,
-      term: null,
+      searchValue: '',
+      searchTerm: '',
+      fetchBaseUrl: 'http://www.omdbapi.com',
+      year: null,
+      type: null,
     };
   },
   created() {
@@ -41,16 +48,31 @@ export default {
   },
   methods: {
     search() {
-      if (!this.term || !this.term.trim()) {
-        console.log('> > > no search term, aborting');
+      if (!this.searchTerm) {
         return;
       }
-      console.log('> > > starting search');
-      this.searching = true;
-      setTimeout(() => {
-        console.log('> > > done searching');
-        this.searching = false;
-      }, 1000);
+      if (!process.env.VUE_APP_OMDB_API_KEY) {
+        return;
+      }
+      const query = {
+        apiKey: process.env.VUE_APP_OMDB_API_KEY,
+        s: this.searchTerm,
+        y: this.year,
+        type: this.type,
+      };
+      this.fetch({ query });
+    },
+  },
+  watch: {
+    searchValue(newVal, oldVal) {
+      const trimmed = {
+        newVal: newVal && newVal.trim(),
+        oldVal: oldVal && oldVal.trim(),
+      };
+      if (trimmed.newVal === trimmed.oldVal) {
+        return;
+      }
+      this.searchTerm = trimmed.newVal;
     },
   },
 };
