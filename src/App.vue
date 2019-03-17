@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Header msg="cinematic"/>
-    <Search/>
+    <Search @data="searchSuccess" @error="searchError"/>
     <Gallery/>
   </div>
 </template>
@@ -17,6 +17,16 @@ export default {
     Header,
     Search,
     Gallery,
+  },
+  methods: {
+    searchSuccess(data) {
+      console.log('>>>>>>>>> searchSuccess', data);
+      // todo - implement
+    },
+    searchError(error) {
+      console.error('>>>>>>>>> searchError', error);
+      // todo - implement
+    },
   },
 };
 </script>
