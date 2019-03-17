@@ -25,7 +25,7 @@ body {
 
 body,
 input {
-  font-family: 'harting', 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Harting", "Courier New", monospace;
 }
 
 div,
@@ -47,6 +47,8 @@ input::placeholder {
 h1 {
   font-weight: normal;
   font-size: 2.5em;
+  // explicitly state line-height to prevent collapse when fontface swaps
+  line-height: 1;
 }
 
 input {
@@ -54,8 +56,9 @@ input {
   outline: 0 none;
 }
 
+
 @font-face {
-  font-family: 'harting';
+  font-family: 'Harting';
   src: url('./assets/fonts/harting-plain-webfont.woff') format('woff');
   font-weight: normal;
   font-style: normal;
