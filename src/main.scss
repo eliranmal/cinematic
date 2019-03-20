@@ -3,7 +3,7 @@
   --color-main: #ff0038;
   --color-text: #635b52;
   --color-text-complement: #ccc;
-  --color-bg: #fafafa;
+  --color-bg: #f9f9f9;
   --color-bg-complement: #fff;
 }
 
@@ -13,8 +13,6 @@ html {
 
 html,
 body {
-  width: 100vw;
-  height: 100vh;
   margin: 0;
   padding: 0;
   color: var(--color-text);
@@ -36,7 +34,6 @@ input {
 h1,
 input {
   margin: 1rem 0;
-  padding: 0 1rem;
 }
 
 h1,
