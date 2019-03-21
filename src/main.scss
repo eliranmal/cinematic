@@ -22,12 +22,14 @@ body {
 }
 
 body,
-input {
+input,
+button {
   font-family: "Harting", "Courier New", monospace;
 }
 
 div,
-input {
+input,
+button {
   box-sizing: border-box;
 }
 
@@ -37,6 +39,7 @@ input {
 }
 
 h1,
+button,
 input::placeholder {
   user-select: none;
 }
@@ -51,6 +54,13 @@ h1 {
 input {
   border-radius: 0;
   outline: 0 none;
+}
+
+button {
+  border: 0 none;
+  border-radius: 0;
+  outline: 0 none;
+  cursor: pointer;
 }
 
 
