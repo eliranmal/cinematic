@@ -1,8 +1,16 @@
 import './main.scss';
 import Vue from 'vue';
+import VueMq from 'vue-mq';
 import App from './App.vue';
+import { sortByValue } from './lib/object';
+import { breakpoints } from './config/layout';
 
 Vue.config.productionTip = false;
+
+Vue.use(VueMq, {
+  // ensure lexical ordering of values, otherwise vue-mq breaks!
+  breakpoints: sortByValue(breakpoints),
+});
 
 console.log(`< ${process.env.VUE_APP_NAME} v${process.env.VUE_APP_VERSION} >`);
 
