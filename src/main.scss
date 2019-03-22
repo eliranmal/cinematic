@@ -1,8 +1,9 @@
 
 :root {
   --color-main: #ff0038;
-  --color-text: #635b52;
+  --color-text: #635f5e;
   --color-text-complement: #ccc;
+  --color-text-shadow: #2a2625;
   --color-bg: #f9f9f9;
   --color-bg-complement: #fff;
 }
@@ -23,12 +24,14 @@ body {
 
 body,
 input,
+select,
 button {
   font-family: "Harting", "Courier New", monospace;
 }
 
 div,
 input,
+select,
 button {
   box-sizing: border-box;
 }
@@ -56,10 +59,13 @@ input {
   outline: 0 none;
 }
 
-button {
+button,
+select {
+  padding: 0;
   border: 0 none;
   border-radius: 0;
   outline: 0 none;
+  background: transparent none;
   cursor: pointer;
 }
 
