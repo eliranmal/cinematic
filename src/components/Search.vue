@@ -82,61 +82,55 @@ export default {
 
   $height: 2rem;
 
-  label,
-  label > * {
-    background-color: var(--color-bg);
-  }
+  .search {
 
-  label {
-    position: relative;
-    display: block;
-    border-radius: $height / 2;
-    box-shadow: 100px -10px 100px #e2e2e2;
-
-    .icon {
-
-      &:after {
-        content: '\21b5';
-        box-sizing: border-box;
-        position: absolute;
-        top: $height * .25;
-        right: $height * .25;
-        width: $height * .5;
-        height: $height * .5;
-        border: 2px solid transparent;
-        border-radius: 50%;
-        text-align: center;
-        font-size: $height * .375;
-        font-weight: bold;
-        line-height: 1.75;
-        color: var(--color-bg);
-        background-color: var(--color-text-complement);
-        cursor: pointer;
-      }
-
-      &:focus:after {
-        color: var(--color-text);
-      }
+    label,
+    label > * {
+      background-color: var(--color-bg);
     }
 
-    input[type="search"] {
-      width: calc(100% - #{$height});
+    label {
+      position: relative;
       display: block;
-      border: 0 none;
-      line-height: $height;
-      font-size: $height / 2;
-      padding-right: 0;
+      border-radius: $height / 2;
+      box-shadow: 100px -10px 100px #e2e2e2;
 
-      &::placeholder {
-        color: var(--color-text-complement);
+      .icon {
+
+        &:after {
+          content: url("../assets/images/magnify.svg");
+          position: absolute;
+          top: $height * .125;
+          right: $height * .125;
+          width: $height * .75;
+          height: $height * .75;
+          border: .05rem solid transparent;
+          border-radius: 50%;
+          color: var(--color-bg);
+          background-color: var(--color-main);
+          cursor: pointer;
+        }
       }
 
-      &::-webkit-search-cancel-button {
-        margin-left: .5em;
-        cursor: pointer;
+      input[type="search"] {
+        width: calc(100% - #{$height * 1.2});
+        display: block;
+        border: 0 none;
+        line-height: $height;
+        font-size: $height / 2;
+        padding-left: .25rem;
+        padding-right: 0;
+
+        &::placeholder {
+          color: var(--color-text-complement);
+        }
+
+        &::-webkit-search-cancel-button {
+          margin-left: .5em;
+          cursor: pointer;
+        }
       }
     }
-
   }
 
 </style>
