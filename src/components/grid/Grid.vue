@@ -59,8 +59,6 @@ export default {
   },
   data() {
     return {
-      comparator: null,
-      comparators: null,
       itemLayoutResolver: null,
       gridLayout: {
         rowHeight: 30,
@@ -116,21 +114,26 @@ export default {
     layout() {
       return this.generateLayout(this.applySorter());
     },
+    comparator() {
+      if (!this.sorter) {
+        return null;
+      }
+      const { by: prop, dir } = this.sorter;
+      let comparators;
+      if (prop) {
+        comparators = compareBy(prop);
+      }
+      let comparator;
+      if (comparators) {
+        comparator = comparators[dir];
+      }
+      return comparator;
+    },
   },
   watch: {
     layoutType(type) {
       if (type) {
         this.itemLayoutResolver = itemResolverFactory(type);
-      }
-    },
-    ['sorter.dir'](dir) {
-      if (dir && this.comparators) {
-        this.comparator = this.comparators[dir];
-      }
-    },
-    ['sorter.by'](prop) {
-      if (prop) {
-        this.comparators = compareBy(prop);
       }
     },
   },
@@ -143,6 +146,24 @@ export default {
     .item {
       position: relative;
       display: flex;
+    }
+
+    .image {
+      height: 100%;
+      background-color: transparent;
+      background-repeat: no-repeat;
+      background-position: 50% 50%;
+      background-size: cover;
+      opacity: .7;
+
+      &:hover {
+        opacity: 1;
+      }
+
+      &.not-available {
+        background-image: url("../../assets/images/image-sketch.svg");
+        background-size: 100% 100%;
+      }
     }
 
     &.tiles {
@@ -158,12 +179,10 @@ export default {
 
           &.available {
             /* background-image is determined imperatively from api data */
-            background-size: cover;
             transition: background-position 700ms;
 
             &:hover {
               background-position: 100% 100%;
-              opacity: 1;
             }
           }
 
@@ -196,7 +215,6 @@ export default {
           flex-shrink: 0;
           width: 2rem;
           height: 2rem;
-          background-size: contain;
         }
 
         .text {
