@@ -118,9 +118,9 @@ export default {
     },
   },
   watch: {
-    layoutType(newVal) {
-      if (newVal) {
-        this.itemLayoutResolver = itemResolverFactory(newVal);
+    layoutType(type) {
+      if (type) {
+        this.itemLayoutResolver = itemResolverFactory(type);
       }
     },
     ['sorter.dir'](dir) {
