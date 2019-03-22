@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "debounce": "^1.2.0",
+    "v-show-slide": "^1.6.0",
     "vue": "^2.6.6",
     "vue-grid-layout": "^2.3.4",
     "vue-mq": "^1.0.1"
