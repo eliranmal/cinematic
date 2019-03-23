@@ -15,6 +15,12 @@
              :style="itemImageStyle(item)"
              :title="item.text"></div>
         <div class="text" :title="item.text">{{item.text}}</div>
+        <a v-if="item.link"
+           :href="item.link.url"
+           :title="item.link.title"
+           target="_blank"
+           class="link"
+        >{{item.link.text}}</a>
       </grid-item>
     </grid-layout>
   </div>
@@ -208,19 +214,54 @@ export default {
           border-bottom: 1px dashed var(--color-text-complement);
         }
 
+        & > * {
+          margin: 0 1rem 0 0;
+
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+
         .image {
           flex-shrink: 0;
           width: 2rem;
           height: 2rem;
         }
 
-        .text {
+        .text,
+        .link {
           line-height: 2rem;
-          font-size: .7rem;
-          padding: 0 1rem;
+        }
+
+        .text {
+          flex-grow: 1;
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
+          font-size: .7rem;
+        }
+
+        .link {
+          flex-shrink: 0;
+          justify-self: flex-end;
+          display: inline-block;
+          font-size: .5rem;
+
+          &:before {
+            content: '';
+            float: left;
+            display: inline-block;
+            width: .75rem;
+            height: 2rem;
+            background: transparent url("../../assets/images/link.svg") 50% 50% no-repeat;
+            background-size: contain;
+          }
+
+          &:hover {
+            &:before {
+              background-image: url("../../assets/images/link-over.svg");
+            }
+          }
         }
       }
     }
