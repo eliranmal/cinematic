@@ -15,7 +15,7 @@
              :style="itemImageStyle(item)"
              :title="item.text"></div>
         <div class="text" :title="item.text">{{item.text}}</div>
-        <a v-if="item.link"
+        <a v-if="layoutType === 'list' && item.link"
            :href="item.link.url"
            :title="item.link.title"
            target="_blank"
