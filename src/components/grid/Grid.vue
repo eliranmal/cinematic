@@ -170,7 +170,6 @@ export default {
 
       &.not-available {
         background-image: url("../../assets/images/image-sketch.svg");
-        background-size: 100% 100%;
       }
     }
 
@@ -180,23 +179,13 @@ export default {
         align-content: stretch;
 
         .image {
-          height: 100%;
           background-color: var(--color-bg-complement);
-          background-repeat: no-repeat;
-          opacity: .7;
+          /* background-image is determined imperatively from api data */
+          background-position: 0 0;
+          transition: background-position 700ms;
 
-          &.available {
-            /* background-image is determined imperatively from api data */
-            transition: background-position 700ms;
-
-            &:hover {
-              background-position: 100% 100%;
-            }
-          }
-
-          &.not-available {
-            background-image: url("../../assets/images/image-sketch.svg");
-            background-size: 100% 100%;
+          &:hover {
+            background-position: 100% 100%;
           }
         }
 
