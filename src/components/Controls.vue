@@ -1,9 +1,9 @@
 <template>
   <div class="controls">
     <div class="action-bar">
-      <button class="sort" @click="showDrawer = !showDrawer"></button>
-      <button class="list" @click="triggerAction('list')"></button>
-      <button class="tiles" @click="triggerAction('tiles')"></button>
+      <button class="icon icon-sort" @click="showDrawer = !showDrawer"></button>
+      <button class="icon icon-list" @click="triggerAction('list')"></button>
+      <button class="icon icon-tiles" @click="triggerAction('tiles')"></button>
     </div>
     <div class="drawer" v-show-slide="showDrawer">
       <div class="sort-form">
@@ -21,7 +21,7 @@
                  v-model="sortDir"/>
           <label for="sort-dir-desc">{{ i18n.sortDirDescLabel }}</label>
         </div>
-        <button type="submit" class="shuffle" @click="submitSort"></button>
+        <button type="submit" class="icon icon-shuffle" @click="submitSort"></button>
       </div>
     </div>
   </div>
@@ -69,13 +69,14 @@ export default {
 
 <style scoped lang="scss">
 
-  @mixin image-button($className, $hover: true) {
-    &.#{$className} {
-      background-image: url("../assets/images/#{$className}.svg");
+  @mixin is-icon($iconName, $hover: true) {
+    &.icon.icon-#{$iconName} {
+      background-size: contain;
+      background-image: url("../assets/images/#{$iconName}.svg");
 
       @if $hover == true {
         &:hover {
-          background-image: url("../assets/images/#{$className}-over.svg");
+          background-image: url("../assets/images/#{$iconName}-over.svg");
         }
       }
     }
@@ -122,12 +123,12 @@ export default {
         margin-right: 0;
       }
 
-      @include image-button("list");
-      @include image-button("tiles");
-      @include image-button("sort");
-      @include image-button("shuffle", false);
+      @include is-icon("list");
+      @include is-icon("tiles");
+      @include is-icon("sort");
+      @include is-icon("shuffle", false);
 
-      &.tiles {
+      &.icon.icon-tiles {
         // make up for large padding in the svg
         background-size: 1.5rem 1.5rem;
       }

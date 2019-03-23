@@ -3,18 +3,23 @@
        :class="layoutType">
     <grid-layout
       :layout="layout"
-      :margin="[12, 12]"
       :col-num="colNum"
       v-bind="gridLayout">
       <grid-item v-for="(item) in layout"
                  :key="item.i"
                  v-bind="item"
+                 :style="itemStyle(item)"
                  class="item">
         <div class="image"
              :class="itemImageClassName(item)"
-             :style="itemImageStyle(item)"
              :title="item.text"></div>
         <div class="text" :title="item.text">{{item.text}}</div>
+        <a v-if="layoutType === 'list' && item.link"
+           :href="item.link.url"
+           :title="item.link.title"
+           target="_blank"
+           class="link"
+        >{{item.link.text}}</a>
       </grid-item>
     </grid-layout>
   </div>
@@ -64,6 +69,7 @@ export default {
       itemLayoutResolver: null,
       gridLayout: {
         rowHeight: 30,
+        margin: [12, 12],
         cols,
         breakpoints,
         responsive: false,
@@ -82,13 +88,17 @@ export default {
     this.itemLayoutResolver = itemResolverFactory(this.layoutType);
   },
   methods: {
-    itemImageStyle(item) {
+    itemStyle(item) {
+      let style = {
+        '--item-border-offset': `-${this.gridLayout.margin[1]}px`,
+      };
       if (this.hasImage(item)) {
-        return {
-          backgroundImage: `url("${item.imageUrl}"), url("${this.fallbackImageUrl}")`,
-        };
+        style = Object.assign(style, {
+          '--item-background-image': `url("${item.imageUrl}")`,
+          '--item-background-image-fallback': `url("${this.fallbackImageUrl}")`,
+        });
       }
-      return false;
+      return style;
     },
     itemImageClassName(item) {
       if (this.hasImage(item)) {
@@ -154,22 +164,23 @@ export default {
     .item {
       position: relative;
       display: flex;
-    }
 
-    .image {
-      height: 100%;
-      background-color: transparent;
-      background-repeat: no-repeat;
-      background-position: 50% 50%;
-      background-size: cover;
-      opacity: .7;
-
-      &:hover {
-        opacity: 1;
-      }
-
-      &.not-available {
+      .image {
+        height: 100%;
         background-image: url("../../assets/images/image-sketch.svg");
+        background-color: transparent;
+        background-repeat: no-repeat;
+        background-position: 50% 50%;
+        background-size: cover;
+        opacity: .7;
+
+        &:hover {
+          opacity: 1;
+        }
+
+        &.available {
+          background-image: var(--item-background-image), var(--item-background-image-fallback);
+        }
       }
     }
 
@@ -180,7 +191,6 @@ export default {
 
         .image {
           background-color: var(--color-bg-complement);
-          /* background-image is determined imperatively from api data */
           background-position: 0 0;
           transition: background-position 700ms;
 
@@ -204,8 +214,20 @@ export default {
         flex-direction: row;
         align-content: stretch;
 
-        &:not(:last-child) {
-          border-bottom: 1px dashed var(--color-text-complement);
+        &:not(:first-child):before {
+          content: '';
+          position: absolute;
+          top: var(--item-border-offset);
+          width: 100%;
+          border-top: 1px dashed var(--color-text-complement);
+        }
+
+        & > * {
+          margin: 0 1rem 0 0;
+
+          &:last-child {
+            margin-right: 0;
+          }
         }
 
         .image {
@@ -214,13 +236,40 @@ export default {
           height: 2rem;
         }
 
-        .text {
+        .text,
+        .link {
           line-height: 2rem;
-          font-size: .7rem;
-          padding: 0 1rem;
+        }
+
+        .text {
+          flex-grow: 1;
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
+          font-size: .7rem;
+        }
+
+        .link {
+          flex-shrink: 0;
+          justify-self: flex-end;
+          display: inline-block;
+          font-size: .5rem;
+
+          &:before {
+            content: '';
+            float: left;
+            display: inline-block;
+            width: .75rem;
+            height: 2rem;
+            background: transparent url("../../assets/images/link.svg") 50% 50% no-repeat;
+            background-size: contain;
+          }
+
+          &:hover {
+            &:before {
+              background-image: url("../../assets/images/link-over.svg");
+            }
+          }
         }
       }
     }

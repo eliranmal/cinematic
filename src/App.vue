@@ -25,6 +25,9 @@ export default {
     return {
       i18n: {
         appName: 'cinematic',
+        imdbLink: {
+          text: 'imdb',
+        },
       },
       searchResults: null,
       layoutType: 'tiles',
@@ -60,6 +63,11 @@ export default {
       return this.searchResults.Search.map(({ Poster, Title, Year, Type, imdbID }) => ({
         id: imdbID,
         text: `${Title} (${Year})`,
+        link: {
+          url: `https://www.imdb.com/title/${imdbID}/`,
+          title: imdbID,
+          text: this.i18n.imdbLink.text,
+        },
         imageUrl: Poster,
         imdbID,
         title: Title,
