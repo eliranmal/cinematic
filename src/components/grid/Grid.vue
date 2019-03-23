@@ -25,6 +25,7 @@ import { GridItem, GridLayout } from 'vue-grid-layout';
 import { compareBy } from './sorting';
 import { itemResolverFactory } from './layout';
 import { breakpoints } from '../../config/layout';
+import { resolvedPathMap } from '../../lib/runtime';
 
 const cols = {
   xxs: 1,
@@ -59,6 +60,7 @@ export default {
   },
   data() {
     return {
+      imgCache: {},
       itemLayoutResolver: null,
       gridLayout: {
         rowHeight: 30,
@@ -73,6 +75,9 @@ export default {
       },
     };
   },
+  beforeMount() {
+    this.imgCache = resolvedPathMap(require.context('../../assets/images/', true, /image-sketch\.svg$/));
+  },
   mounted() {
     this.itemLayoutResolver = itemResolverFactory(this.layoutType);
   },
@@ -80,7 +85,7 @@ export default {
     itemImageStyle(item) {
       if (this.hasImage(item)) {
         return {
-          backgroundImage: `url("${item.imageUrl}")`,
+          backgroundImage: `url("${item.imageUrl}"), url("${this.fallbackImageUrl}")`,
         };
       }
       return false;
@@ -108,6 +113,9 @@ export default {
     },
   },
   computed: {
+    fallbackImageUrl() {
+      return this.imgCache['./image-sketch.svg'];
+    },
     colNum() {
       return cols[this.$mq || 'md'];
     },
