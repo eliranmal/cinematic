@@ -69,6 +69,17 @@ select {
   cursor: pointer;
 }
 
+a {
+  color: var(--color-text);
+  font-weight: bold;
+
+  &:active,
+  &:hover,
+  &:focus {
+    color: var(--color-main);
+  }
+}
+
 
 @font-face {
   font-family: 'Harting';
