@@ -261,13 +261,13 @@ export default {
             display: inline-block;
             width: .75rem;
             height: 2rem;
-            background: transparent url("../../assets/images/link.svg") 50% 50% no-repeat;
-            background-size: contain;
+            mask: url("../../assets/images/link.svg") 50% 50% / contain no-repeat;
+            background-color: var(--color-text);
           }
 
           &:hover {
             &:before {
-              background-image: url("../../assets/images/link-over.svg");
+              background-color: var(--color-main);
             }
           }
         }

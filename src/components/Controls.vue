@@ -124,17 +124,17 @@ export default {
     background-position: 50% 50%;
   }
 
-  @mixin image-over($iconName) {
-    background-image: url("../assets/images/#{$iconName}-over.svg");
+  @mixin icon-image-alt($iconName) {
+    background-color: var(--color-main);
   }
 
-  @mixin icon-image($iconName, $overSelector: "&:hover") {
-    background-size: contain;
-    background-image: url("../assets/images/#{$iconName}.svg");
+  @mixin icon-image($iconName, $stateSelector: "&:hover") {
+    mask: url("../assets/images/#{$iconName}.svg") 50% 50% / contain no-repeat;
+    background-color: var(--color-text);
 
-    @if $overSelector {
-      #{$overSelector} {
-        @include image-over($iconName);
+    @if $stateSelector {
+      #{$stateSelector} {
+        @include icon-image-alt($iconName);
       }
     }
   }
@@ -142,14 +142,14 @@ export default {
   .controls {
     margin: 0 0 1rem;
 
-    input[type="radio"] + label {
-      cursor: pointer;
-    }
-
     input[type="radio"] {
       appearance: none;
       position: absolute;
       visibility: hidden;
+    }
+
+    input[type="radio"] + label {
+      cursor: pointer;
     }
 
     button {
@@ -180,16 +180,15 @@ export default {
     .drawer > div {
       display: flex;
       flex-direction: row;
+      align-items: center;
     }
 
     .drawer > div {
-      align-items: center;
       justify-content: flex-start;
     }
 
     .action-bar,
     .action-bar .group {
-      align-items: flex-end;
       justify-content: flex-end;
     }
 
@@ -207,7 +206,8 @@ export default {
             &.icon-tiles {
               @include icon-image("tiles", false);
               // make up for large padding in the svg
-              background-size: ($main-button-size * 1.1) ($main-button-size * 1.1);
+              width: $main-button-size * 1.1;
+              height: $main-button-size * 1.1;
             }
           }
         }
@@ -215,11 +215,11 @@ export default {
         input[type="radio"]:checked + label {
           &.icon {
             &.icon-list {
-              @include image-over("list");
+              @include icon-image-alt("list");
             }
 
             &.icon-tiles {
-              @include image-over("tiles");
+              @include icon-image-alt("tiles");
             }
           }
         }
@@ -236,22 +236,22 @@ export default {
       padding: ($form-control-height * .25) ($form-control-height * .75);
       border-left: 3px solid var(--color-main);
 
-      select,
-      input[type="radio"] + label {
-        font-weight: bold;
-        color: var(--color-text-shadow);
-
-        &:hover {
-          color: var(--color-main);
-        }
-      }
-
       & > label {
         margin-right: $form-control-height * .25;
       }
 
+      select,
+      input[type="radio"] + label {
+        font-weight: bold;
+        color: var(--color-text-shadow);
+      }
+
       select {
         margin-top: .1rem;
+
+        &:hover {
+          color: var(--color-main);
+        }
       }
 
       .separator {
