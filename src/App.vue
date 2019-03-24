@@ -31,7 +31,7 @@ export default {
       },
       searchResults: null,
       layoutType: 'tiles',
-      sorter: null,
+      sorter: {},
     };
   },
   methods: {
@@ -48,7 +48,7 @@ export default {
           this.layoutType = action;
           break;
         case 'sort':
-          this.sorter = data;
+          this.sorter = Object.assign({}, this.sorter, data);
           break;
         default:
           break;

@@ -7,10 +7,10 @@
     </div>
     <div class="drawer" v-show-slide="showDrawer">
       <div class="sort-form">
-        <label for="sort-by">{{ i18n.sortByLabel }}</label>
-        <select id="sort-by" v-model="sortBy">
-          <option disabled value="">{{ i18n.sortBySelectPlaceholder }}</option>
-          <option v-for="prop in sortByFields" :key="prop" :value="prop">{{ prop }}</option>
+        <label for="sort-prop">{{ i18n.sortPropLabel }}</label>
+        <select id="sort-prop" v-model="sortProp">
+          <option disabled value="">{{ i18n.sortPropSelectPlaceholder }}</option>
+          <option v-for="prop in sortPropFields" :key="prop" :value="prop">{{ prop }}</option>
         </select>
         <label>{{ i18n.sortDirLabel }}</label>
         <div class="group">
@@ -21,7 +21,6 @@
                  v-model="sortDir"/>
           <label for="sort-dir-desc">{{ i18n.sortDirDescLabel }}</label>
         </div>
-        <button type="submit" class="icon icon-shuffle" @click="submitSort"></button>
       </div>
     </div>
   </div>
@@ -33,22 +32,25 @@ export default {
   data() {
     return {
       i18n: {
-        sortByLabel: 'sort by',
+        sortPropLabel: 'sort by',
         sortDirLabel: 'sort dir',
         sortDirAscLabel: 'asc',
         sortDirDescLabel: 'desc',
-        sortBySelectPlaceholder: '- choose -',
+        sortPropSelectPlaceholder: '---',
       },
       showDrawer: false,
-      sortByFields: [
+      sortPropFields: [
         'title',
         'year',
         'type',
         'imdbID',
       ],
+      sortProp: 'title',
       sortDir: 'asc',
-      sortBy: 'title',
     };
+  },
+  mounted() {
+    this.triggerSort();
   },
   methods: {
     triggerAction(action, data) {
@@ -57,10 +59,22 @@ export default {
         data,
       });
     },
-    submitSort() {
+    triggerSort() {
+      this.triggerAction('sort', {
+        prop: this.sortProp,
+        dir: this.sortDir,
+      });
+    },
+  },
+  watch: {
+    sortDir() {
       this.triggerAction('sort', {
         dir: this.sortDir,
-        by: this.sortBy,
+      });
+    },
+    sortProp() {
+      this.triggerAction('sort', {
+        prop: this.sortProp,
       });
     },
   },
