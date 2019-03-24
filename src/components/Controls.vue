@@ -33,9 +33,9 @@ export default {
     return {
       i18n: {
         sortPropLabel: 'sort by',
-        sortDirLabel: 'sort dir',
-        sortDirAscLabel: 'asc',
-        sortDirDescLabel: 'desc',
+        sortDirLabel: 'sort direction',
+        sortDirAscLabel: 'ascending',
+        sortDirDescLabel: 'descending',
         sortPropSelectPlaceholder: '---',
       },
       showDrawer: false,
