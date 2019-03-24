@@ -22,15 +22,22 @@
 import { debounce } from 'debounce';
 import fetch from '../mixins/fetch';
 
+const suggestedTerms = [
+  'clerks',
+  'silent bob',
+  'super groovy',
+];
+
 export default {
   name: 'Search',
   mixins: [
     fetch,
   ],
   data() {
+    const termSuggestion = suggestedTerms[Math.floor(Math.random() * suggestedTerms.length)];
     return {
       i18n: {
-        placeholder: 'movie, series or episode',
+        placeholder: `movie, series or episode. try '${termSuggestion}'`,
         iconTitle: 'search',
       },
       year: null,
