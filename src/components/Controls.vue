@@ -2,6 +2,7 @@
   <div class="controls">
     <div class="action-bar">
       <button class="icon icon-sort" @click="showDrawer = !showDrawer"></button>
+      <span class="separator"></span>
       <div class="group">
         <input id="layout-tiles" type="radio" value="tiles" checked="checked"
                v-model="layout"/>
@@ -148,16 +149,18 @@ export default {
         &.icon-sort {
           @include icon-image("sort");
         }
+      }
+    }
 
-        &.icon-list {
-          @include icon-image("list");
-        }
-
-        &.icon-tiles {
-          @include icon-image("tiles");
-          // make up for large padding in the svg
-          background-size: ($main-button-size * 1.2) ($main-button-size * 1.2);
-        }
+    .separator {
+      position: relative;
+      &:after {
+        content: '\B7';
+        display: inline-block;
+        height: 100%;
+        text-align: center;
+        width: 1rem;
+        margin-right: .2em;
       }
     }
 
@@ -193,7 +196,7 @@ export default {
             &.icon-tiles {
               @include icon-image("tiles", false);
               // make up for large padding in the svg
-              background-size: ($main-button-size * 1.2) ($main-button-size * 1.2);
+              background-size: ($main-button-size * 1.1) ($main-button-size * 1.1);
             }
           }
         }
