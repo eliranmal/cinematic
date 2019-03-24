@@ -101,23 +101,30 @@ export default {
     label {
       position: relative;
       display: block;
-      border-radius: $height / 2;
+      border-radius: $height / 1.75;
       box-shadow: 100px -10px 100px #e2e2e2;
 
+      .icon,
+      .icon:after {
+        position: absolute;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+
       .icon {
+        top: calc((#{$height} * .125) + 1px);
+        right: calc((#{$height} * .125) + 1px);
+        width: $height * .775;
+        height: $height * .775;
+        outline: 0 none;
+        background-color: var(--color-main);
 
         &:after {
-          content: url("../assets/images/magnify.svg");
-          position: absolute;
-          top: $height * .125;
-          right: $height * .125;
-          width: $height * .75;
-          height: $height * .75;
-          border: .05rem solid transparent;
-          border-radius: 50%;
-          color: var(--color-bg);
-          background-color: var(--color-main);
-          cursor: pointer;
+          content: '';
+          width: 100%;
+          height: 100%;
+          mask-image: url("../assets/images/magnify.svg");
+          background-color: var(--color-bg-complement);
         }
       }
 
