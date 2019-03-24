@@ -2,8 +2,14 @@
   <div class="controls">
     <div class="action-bar">
       <button class="icon icon-sort" @click="showDrawer = !showDrawer"></button>
-      <button class="icon icon-list" @click="triggerAction('list')"></button>
-      <button class="icon icon-tiles" @click="triggerAction('tiles')"></button>
+      <div class="group">
+        <input id="layout-tiles" type="radio" value="tiles" checked="checked"
+               v-model="layout"/>
+        <label for="layout-tiles" class="icon icon-tiles"></label>
+        <input id="layout-list" type="radio" value="list"
+               v-model="layout"/>
+        <label for="layout-list" class="icon icon-list"></label>
+      </div>
     </div>
     <div class="drawer" v-show-slide="showDrawer">
       <div class="sort-form">
@@ -47,10 +53,12 @@ export default {
       ],
       sortProp: 'title',
       sortDir: 'asc',
+      layout: 'tiles',
     };
   },
   mounted() {
     this.triggerSort();
+    this.triggerLayout();
   },
   methods: {
     triggerAction(action, data) {
@@ -65,17 +73,23 @@ export default {
         dir: this.sortDir,
       });
     },
+    triggerLayout() {
+      this.triggerAction(this.layout);
+    },
   },
   watch: {
-    sortDir() {
+    sortDir(dir) {
       this.triggerAction('sort', {
-        dir: this.sortDir,
+        dir,
       });
     },
-    sortProp() {
+    sortProp(prop) {
       this.triggerAction('sort', {
-        prop: this.sortProp,
+        prop,
       });
+    },
+    layout(type) {
+      this.triggerAction(type);
     },
   },
 };
@@ -83,33 +97,75 @@ export default {
 
 <style scoped lang="scss">
 
-  @mixin is-icon($iconName, $hover: true) {
-    &.icon.icon-#{$iconName} {
-      background-size: contain;
-      background-image: url("../assets/images/#{$iconName}.svg");
+  $form-control-height: 1rem;
+  $main-button-size: 1.25rem;
 
-      @if $hover == true {
-        &:hover {
-          background-image: url("../assets/images/#{$iconName}-over.svg");
-        }
+  @mixin icon-button {
+    display: inline-block;
+    flex-shrink: 0;
+    flex-grow: 0;
+    width: $main-button-size;
+    height: $main-button-size;
+    margin: 0 .25rem;
+    background-color: transparent;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+  }
+
+  @mixin image-over($iconName) {
+    background-image: url("../assets/images/#{$iconName}-over.svg");
+  }
+
+  @mixin icon-image($iconName, $overSelector: "&:hover") {
+    background-size: contain;
+    background-image: url("../assets/images/#{$iconName}.svg");
+
+    @if $overSelector {
+      #{$overSelector} {
+        @include image-over($iconName);
       }
     }
   }
 
-  $form-control-height: 1rem;
-
   .controls {
     margin: 0 0 1rem;
 
+    input[type="radio"] + label {
+      cursor: pointer;
+    }
+
+    input[type="radio"] {
+      appearance: none;
+      position: absolute;
+      visibility: hidden;
+    }
+
+    button {
+      @include icon-button;
+
+      &.icon {
+        &.icon-sort {
+          @include icon-image("sort");
+        }
+
+        &.icon-list {
+          @include icon-image("list");
+        }
+
+        &.icon-tiles {
+          @include icon-image("tiles");
+          // make up for large padding in the svg
+          background-size: ($main-button-size * 1.2) ($main-button-size * 1.2);
+        }
+      }
+    }
+
     .action-bar,
+    .action-bar .group,
     .drawer > div {
       display: flex;
       flex-direction: row;
-    }
-
-    .action-bar {
-      align-items: flex-end;
-      justify-content: flex-end;
     }
 
     .drawer > div {
@@ -117,41 +173,42 @@ export default {
       justify-content: flex-start;
     }
 
-    /* buttons may appear anywhere on the template, don't nest them further */
-    button {
-      flex-shrink: 0;
-      flex-grow: 0;
-      width: 1.25rem;
-      height: 1.25rem;
-      margin: 0 .25rem;
-      background-color: transparent;
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: 50% 50%;
+    .action-bar,
+    .action-bar .group {
+      align-items: flex-end;
+      justify-content: flex-end;
+    }
 
-      &:first-child {
-        margin-left: 0;
-      }
+    .action-bar {
 
-      &:last-child {
-        margin-right: 0;
-      }
+      .group {
+        input[type="radio"] + label {
+          @include icon-button;
 
-      @include is-icon("list");
-      @include is-icon("tiles");
-      @include is-icon("sort");
-      @include is-icon("shuffle", false);
+          &.icon {
+            &.icon-list {
+              @include icon-image("list", false);
+            }
 
-      &.icon.icon-tiles {
-        // make up for large padding in the svg
-        background-size: 1.5rem 1.5rem;
-      }
+            &.icon-tiles {
+              @include icon-image("tiles", false);
+              // make up for large padding in the svg
+              background-size: ($main-button-size * 1.2) ($main-button-size * 1.2);
+            }
+          }
+        }
 
-      &[type="submit"] {
-        width: $form-control-height;
-        height: $form-control-height;
-        border-radius: 50%;
-        background-color: var(--color-main);
+        input[type="radio"]:checked + label {
+          &.icon {
+            &.icon-list {
+              @include image-over("list");
+            }
+
+            &.icon-tiles {
+              @include image-over("tiles");
+            }
+          }
+        }
       }
     }
 
@@ -170,8 +227,7 @@ export default {
         font-weight: bold;
         color: var(--color-text-shadow);
 
-        &:hover,
-        &:checked {
+        &:hover {
           color: var(--color-main);
         }
       }
@@ -193,18 +249,11 @@ export default {
 
         input[type="radio"] + label {
           background-color: var(--color-text-complement);
-          cursor: pointer;
           padding: ($form-control-height * .1) ($form-control-height * .2);
         }
 
-        input[type="radio"] {
-          appearance: none;
-          position: absolute;
-          visibility: hidden;
-
-          &:checked + label {
-            color: var(--color-main);
-          }
+        input[type="radio"]:checked + label {
+          color: var(--color-main);
         }
       }
     }
