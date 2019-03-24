@@ -1,3 +1,3 @@
 # cinematic
 
-[->](https://cinematic-7audt935k.now.sh/)
+<a href="https://cinematic-7audt935k.now.sh/" target="_blank">-></a>
