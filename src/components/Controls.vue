@@ -1,15 +1,21 @@
 <template>
   <div class="controls">
     <div class="action-bar">
-      <button class="icon icon-sort" @click="showDrawer = !showDrawer"></button>
+      <button class="icon icon-sort"
+              :title="i18n.sortButtonTitle"
+              @click="showDrawer = !showDrawer"></button>
       <span class="separator"></span>
       <div class="group">
         <input id="layout-tiles" type="radio" value="tiles" checked="checked"
                v-model="layout"/>
-        <label for="layout-tiles" class="icon icon-tiles"></label>
+        <label for="layout-tiles" class="icon icon-tiles"
+               :title="i18n.layoutTilesButtonTitle"
+        ></label>
         <input id="layout-list" type="radio" value="list"
                v-model="layout"/>
-        <label for="layout-list" class="icon icon-list"></label>
+        <label for="layout-list" class="icon icon-list"
+               :title="i18n.layoutListButtonTitle"
+        ></label>
       </div>
     </div>
     <div class="drawer" v-show-slide="showDrawer">
@@ -19,6 +25,7 @@
           <option disabled value="">{{ i18n.sortPropSelectPlaceholder }}</option>
           <option v-for="prop in sortPropFields" :key="prop" :value="prop">{{ prop }}</option>
         </select>
+        <span class="separator"></span>
         <label>{{ i18n.sortDirLabel }}</label>
         <div class="group">
           <input id="sort-dir-asc" type="radio" name="sort-dir" value="asc" checked="checked"
@@ -44,6 +51,9 @@ export default {
         sortDirAscLabel: 'ascending',
         sortDirDescLabel: 'descending',
         sortPropSelectPlaceholder: '---',
+        sortButtonTitle: 'open sort menu',
+        layoutTilesButtonTitle: 'toggle tiles view',
+        layoutListButtonTitle: 'toggle list view',
       },
       showDrawer: false,
       sortPropFields: [
@@ -52,8 +62,8 @@ export default {
         'type',
         'imdbID',
       ],
-      sortProp: 'title',
-      sortDir: 'asc',
+      sortProp: 'year',
+      sortDir: 'desc',
       layout: 'tiles',
     };
   },
@@ -154,6 +164,7 @@ export default {
 
     .separator {
       position: relative;
+
       &:after {
         content: '\B7';
         display: inline-block;
@@ -222,7 +233,7 @@ export default {
 
     .sort-form {
       margin-top: $form-control-height * .25;
-      padding: ($form-control-height * .25) ($form-control-height * .5);
+      padding: ($form-control-height * .25) ($form-control-height * .75);
       border-left: 3px solid var(--color-main);
 
       select,
@@ -237,14 +248,15 @@ export default {
 
       & > label {
         margin-right: $form-control-height * .25;
-
-        & + * {
-          margin-right: $form-control-height;
-        }
       }
 
       select {
         margin-top: .1rem;
+      }
+
+      .separator {
+        padding-left: $form-control-height * .5;
+        padding-right: $form-control-height * .5;
       }
 
       .group {
