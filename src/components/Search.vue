@@ -10,6 +10,7 @@
              ref="searchInput">
       <span class="icon"
             tabindex="0"
+            :title="i18n.iconTitle"
             @keydown.enter="debouncedImmediateSearch"
             @keydown.space="debouncedImmediateSearch"
             @click="debouncedImmediateSearch"></span>
@@ -29,7 +30,8 @@ export default {
   data() {
     return {
       i18n: {
-        placeholder: 'search flicks',
+        placeholder: 'movie, series or episode',
+        iconTitle: 'search',
       },
       year: null,
       type: null,

@@ -1,17 +1,31 @@
 <template>
   <div class="controls">
     <div class="action-bar">
-      <button class="icon icon-sort" @click="showDrawer = !showDrawer"></button>
-      <button class="icon icon-list" @click="triggerAction('list')"></button>
-      <button class="icon icon-tiles" @click="triggerAction('tiles')"></button>
+      <button class="icon icon-sort"
+              :title="i18n.sortButtonTitle"
+              @click="showDrawer = !showDrawer"></button>
+      <span class="separator"></span>
+      <div class="group">
+        <input id="layout-tiles" type="radio" value="tiles" checked="checked"
+               v-model="layout"/>
+        <label for="layout-tiles" class="icon icon-tiles"
+               :title="i18n.layoutTilesButtonTitle"
+        ></label>
+        <input id="layout-list" type="radio" value="list"
+               v-model="layout"/>
+        <label for="layout-list" class="icon icon-list"
+               :title="i18n.layoutListButtonTitle"
+        ></label>
+      </div>
     </div>
     <div class="drawer" v-show-slide="showDrawer">
       <div class="sort-form">
-        <label for="sort-by">{{ i18n.sortByLabel }}</label>
-        <select id="sort-by" v-model="sortBy">
-          <option disabled value="">{{ i18n.sortBySelectPlaceholder }}</option>
-          <option v-for="prop in sortByFields" :key="prop" :value="prop">{{ prop }}</option>
+        <label for="sort-prop">{{ i18n.sortPropLabel }}</label>
+        <select id="sort-prop" v-model="sortProp">
+          <option disabled value="">{{ i18n.sortPropSelectPlaceholder }}</option>
+          <option v-for="prop in sortPropFields" :key="prop" :value="prop">{{ prop }}</option>
         </select>
+        <span class="separator"></span>
         <label>{{ i18n.sortDirLabel }}</label>
         <div class="group">
           <input id="sort-dir-asc" type="radio" name="sort-dir" value="asc" checked="checked"
@@ -21,7 +35,6 @@
                  v-model="sortDir"/>
           <label for="sort-dir-desc">{{ i18n.sortDirDescLabel }}</label>
         </div>
-        <button type="submit" class="icon icon-shuffle" @click="submitSort"></button>
       </div>
     </div>
   </div>
@@ -33,22 +46,30 @@ export default {
   data() {
     return {
       i18n: {
-        sortByLabel: 'sort by',
-        sortDirLabel: 'sort dir',
-        sortDirAscLabel: 'asc',
-        sortDirDescLabel: 'desc',
-        sortBySelectPlaceholder: '- choose -',
+        sortPropLabel: 'sort by',
+        sortDirLabel: 'sort direction',
+        sortDirAscLabel: 'ascending',
+        sortDirDescLabel: 'descending',
+        sortPropSelectPlaceholder: '---',
+        sortButtonTitle: 'open sort menu',
+        layoutTilesButtonTitle: 'toggle tiles view',
+        layoutListButtonTitle: 'toggle list view',
       },
       showDrawer: false,
-      sortByFields: [
+      sortPropFields: [
         'title',
         'year',
         'type',
         'imdbID',
       ],
-      sortDir: 'asc',
-      sortBy: 'title',
+      sortProp: 'year',
+      sortDir: 'desc',
+      layout: 'tiles',
     };
+  },
+  mounted() {
+    this.triggerSort();
+    this.triggerLayout();
   },
   methods: {
     triggerAction(action, data) {
@@ -57,11 +78,29 @@ export default {
         data,
       });
     },
-    submitSort() {
+    triggerSort() {
       this.triggerAction('sort', {
+        prop: this.sortProp,
         dir: this.sortDir,
-        by: this.sortBy,
       });
+    },
+    triggerLayout() {
+      this.triggerAction(this.layout);
+    },
+  },
+  watch: {
+    sortDir(dir) {
+      this.triggerAction('sort', {
+        dir,
+      });
+    },
+    sortProp(prop) {
+      this.triggerAction('sort', {
+        prop,
+      });
+    },
+    layout(type) {
+      this.triggerAction(type);
     },
   },
 };
@@ -69,33 +108,78 @@ export default {
 
 <style scoped lang="scss">
 
-  @mixin is-icon($iconName, $hover: true) {
-    &.icon.icon-#{$iconName} {
-      background-size: contain;
-      background-image: url("../assets/images/#{$iconName}.svg");
+  $form-control-height: 1rem;
+  $main-button-size: 1.25rem;
 
-      @if $hover == true {
-        &:hover {
-          background-image: url("../assets/images/#{$iconName}-over.svg");
-        }
+  @mixin icon-button {
+    display: inline-block;
+    flex-shrink: 0;
+    flex-grow: 0;
+    width: $main-button-size;
+    height: $main-button-size;
+    margin: 0 .25rem;
+    background-color: transparent;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+  }
+
+  @mixin image-over($iconName) {
+    background-image: url("../assets/images/#{$iconName}-over.svg");
+  }
+
+  @mixin icon-image($iconName, $overSelector: "&:hover") {
+    background-size: contain;
+    background-image: url("../assets/images/#{$iconName}.svg");
+
+    @if $overSelector {
+      #{$overSelector} {
+        @include image-over($iconName);
       }
     }
   }
 
-  $form-control-height: 1rem;
-
   .controls {
     margin: 0 0 1rem;
 
+    input[type="radio"] + label {
+      cursor: pointer;
+    }
+
+    input[type="radio"] {
+      appearance: none;
+      position: absolute;
+      visibility: hidden;
+    }
+
+    button {
+      @include icon-button;
+
+      &.icon {
+        &.icon-sort {
+          @include icon-image("sort");
+        }
+      }
+    }
+
+    .separator {
+      position: relative;
+
+      &:after {
+        content: '\B7';
+        display: inline-block;
+        height: 100%;
+        text-align: center;
+        width: 1rem;
+        margin-right: .2em;
+      }
+    }
+
     .action-bar,
+    .action-bar .group,
     .drawer > div {
       display: flex;
       flex-direction: row;
-    }
-
-    .action-bar {
-      align-items: flex-end;
-      justify-content: flex-end;
     }
 
     .drawer > div {
@@ -103,41 +187,42 @@ export default {
       justify-content: flex-start;
     }
 
-    /* buttons may appear anywhere on the template, don't nest them further */
-    button {
-      flex-shrink: 0;
-      flex-grow: 0;
-      width: 1.25rem;
-      height: 1.25rem;
-      margin: 0 .25rem;
-      background-color: transparent;
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: 50% 50%;
+    .action-bar,
+    .action-bar .group {
+      align-items: flex-end;
+      justify-content: flex-end;
+    }
 
-      &:first-child {
-        margin-left: 0;
-      }
+    .action-bar {
 
-      &:last-child {
-        margin-right: 0;
-      }
+      .group {
+        input[type="radio"] + label {
+          @include icon-button;
 
-      @include is-icon("list");
-      @include is-icon("tiles");
-      @include is-icon("sort");
-      @include is-icon("shuffle", false);
+          &.icon {
+            &.icon-list {
+              @include icon-image("list", false);
+            }
 
-      &.icon.icon-tiles {
-        // make up for large padding in the svg
-        background-size: 1.5rem 1.5rem;
-      }
+            &.icon-tiles {
+              @include icon-image("tiles", false);
+              // make up for large padding in the svg
+              background-size: ($main-button-size * 1.1) ($main-button-size * 1.1);
+            }
+          }
+        }
 
-      &[type="submit"] {
-        width: $form-control-height;
-        height: $form-control-height;
-        border-radius: 50%;
-        background-color: var(--color-main);
+        input[type="radio"]:checked + label {
+          &.icon {
+            &.icon-list {
+              @include image-over("list");
+            }
+
+            &.icon-tiles {
+              @include image-over("tiles");
+            }
+          }
+        }
       }
     }
 
@@ -148,7 +233,7 @@ export default {
 
     .sort-form {
       margin-top: $form-control-height * .25;
-      padding: ($form-control-height * .25) ($form-control-height * .5);
+      padding: ($form-control-height * .25) ($form-control-height * .75);
       border-left: 3px solid var(--color-main);
 
       select,
@@ -156,22 +241,22 @@ export default {
         font-weight: bold;
         color: var(--color-text-shadow);
 
-        &:hover,
-        &:checked {
+        &:hover {
           color: var(--color-main);
         }
       }
 
       & > label {
         margin-right: $form-control-height * .25;
-
-        & + * {
-          margin-right: $form-control-height;
-        }
       }
 
       select {
         margin-top: .1rem;
+      }
+
+      .separator {
+        padding-left: $form-control-height * .5;
+        padding-right: $form-control-height * .5;
       }
 
       .group {
@@ -179,18 +264,11 @@ export default {
 
         input[type="radio"] + label {
           background-color: var(--color-text-complement);
-          cursor: pointer;
           padding: ($form-control-height * .1) ($form-control-height * .2);
         }
 
-        input[type="radio"] {
-          appearance: none;
-          position: absolute;
-          visibility: hidden;
-
-          &:checked + label {
-            color: var(--color-main);
-          }
+        input[type="radio"]:checked + label {
+          color: var(--color-main);
         }
       }
     }

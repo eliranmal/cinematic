@@ -136,7 +136,7 @@ export default {
       if (!this.sorter) {
         return null;
       }
-      const { by: prop, dir } = this.sorter;
+      const { prop, dir } = this.sorter;
       let comparators;
       if (prop) {
         comparators = compareBy(prop);
