@@ -1,3 +1,3 @@
 # cinematic
 
-[-->](https://cinematic-7audt935k.now.sh/)
+[-->](https://cinematic-8d9a1mf4w.now.sh/)
