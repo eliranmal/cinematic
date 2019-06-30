@@ -42,6 +42,7 @@ export default {
       },
       year: null,
       type: null,
+      page: 1,
       searchTerm: '',
       searchValue: '',
       debounceDelay: 666,
@@ -68,6 +69,7 @@ export default {
         s: this.searchTerm,
         y: this.year,
         type: this.type,
+        page: this.page,
       };
       this.fetch({ query });
     },
